@@ -499,8 +499,7 @@ public:
 			myfile.close();
 		}
 		else {
-			MessageBox(NULL, L"Could not read hiScore file", L"Error", MB_OK);
-			return 0;
+			return 0; // no hiScore file yet (fresh install); it is created on the first win
 		}
 		uint64_t toInt;
 		try {
