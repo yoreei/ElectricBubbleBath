@@ -13,3 +13,4 @@
 *.ttf binary
 *.dll binary
 *.lib binary
+*.gif binary

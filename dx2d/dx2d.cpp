@@ -79,7 +79,7 @@ int WINAPI wWinMain(
 	HWND hwnd = CreateWindowEx(
 		0,                              // Optional window styles.
 		CLASS_NAME,                     // Window class
-		L"Game Jam Engine", // Window text
+		L"Electric Bubble Bath", // Window text
 		WS_POPUP,                       // Window style set to WS_POPUP for borderless
 
 		// Size and position set to cover the entire screen

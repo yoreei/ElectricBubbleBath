@@ -6,11 +6,12 @@
 #include <array>
 #include <stdexcept>
 #include <format>
+#include <iostream>
 
 #include <windows.h>
 #include <d2d1.h>
 #include <d2d1helper.h>
-#include <dwrite.h>
+#include <dwrite_3.h>
 #include <wrl/client.h>
 #include <wincodec.h>
 using Microsoft::WRL::ComPtr;
@@ -99,10 +100,6 @@ public:
 		);
 		checkFailed(hr, hWnd, "createSolidColorBrush failed");
 
-		//hr = pRenderTarget->CreateSolidColorBrush(
-		//	D2D1::ColorF(D2D1::ColorF(0.7f, 0.7f, 1.f)),
-		//	&brushes["blue"]
-		//);
 		hr = pRenderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF(0.49f, 0.995f, 0.995f)),
 			&brushes["blue"]
@@ -116,29 +113,39 @@ public:
 		checkFailed(hr, hWnd, "createSolidColorBrush failed");
 
 
-		IDWriteFactory* pDWriteFactory = nullptr;
-		hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&pDWriteFactory));
+		IDWriteFactory5* pDWriteFactory = nullptr;
+		hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5), reinterpret_cast<IUnknown**>(&pDWriteFactory));
+		checkFailed(hr, hWnd, "DWriteCreateFactory failed");
 
-		ComPtr<IDWriteFontCollection> pFontCollection;
-		hr = pDWriteFactory->GetSystemFontCollection(&pFontCollection, FALSE);
-		checkFailed(hr, hWnd, "getSystemFontCollection failed");
+		// Load the bundled font straight from the game folder, so players don't have to install it
+		ComPtr<IDWriteFontCollection1> pFontCollection;
+		{
+			wchar_t fontPath[MAX_PATH];
+			GetFullPathNameW(fontFile, MAX_PATH, fontPath, nullptr);
+			ComPtr<IDWriteFontFile> pFontFile;
+			ComPtr<IDWriteFontSetBuilder1> pFontSetBuilder;
+			ComPtr<IDWriteFontSet> pFontSet;
+			hr = pDWriteFactory->CreateFontFileReference(fontPath, nullptr, &pFontFile);
+			if (SUCCEEDED(hr)) { hr = pDWriteFactory->CreateFontSetBuilder(&pFontSetBuilder); }
+			if (SUCCEEDED(hr)) { hr = pFontSetBuilder->AddFontFile(pFontFile.Get()); }
+			if (SUCCEEDED(hr)) { hr = pFontSetBuilder->CreateFontSet(&pFontSet); }
+			if (SUCCEEDED(hr)) { hr = pDWriteFactory->CreateFontCollectionFromFontSet(pFontSet.Get(), &pFontCollection); }
+		}
 
-		// Find the font family by name
 		UINT32 index = 0;
 		BOOL exists = FALSE;
-		hr = pFontCollection->FindFamilyName(
-			fontName.c_str(),
-			&index,
-			&exists
-		);
+		if (SUCCEEDED(hr)) {
+			hr = pFontCollection->FindFamilyName(fontName.c_str(), &index, &exists);
+		}
 		if (FAILED(hr) || !exists)
 		{
-			MessageBox(NULL, L"Please, exit the game, install the 'pressStart2P.ttf font file in the game folder for the game to render text properly", L"Error", MB_OK);
-			std::wcerr << L"FindFamilyName failed: " << hr << std::endl;
+			// Fall back to the system fonts (nullptr collection) so the game still runs
+			std::wcerr << L"Could not load " << fontFile << L": " << hr << std::endl;
+			pFontCollection.Reset();
 		}
 		hr = pDWriteFactory->CreateTextFormat(
 			fontName.c_str(),                // Font family
-			nullptr,                 // Font collection
+			pFontCollection.Get(),   // Font collection
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH_NORMAL,
@@ -151,7 +158,7 @@ public:
 
 		hr = pDWriteFactory->CreateTextFormat(
 			fontName.c_str(),                // Font family
-			nullptr,                 // Font collection
+			pFontCollection.Get(),   // Font collection
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH_NORMAL,
@@ -164,7 +171,7 @@ public:
 
 		hr = pDWriteFactory->CreateTextFormat(
 			fontName.c_str(),                // Font family
-			nullptr,                 // Font collection
+			pFontCollection.Get(),   // Font collection
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH_NORMAL,
@@ -494,7 +501,6 @@ public:
 
 	}
 	void drawMenu(const std::string& text) {
-		// todo
 		pLowResRenderTarget->DrawText(
 			L"Electric\nBubble\nBath!",    // Text to render
 			wcslen(L"Electric\nBubble\nBath!"),
@@ -505,26 +511,11 @@ public:
 
 		pLowResRenderTarget->DrawText(
 			L"[ENTER] Game\n[BSPACE] Quit",    // Text to render
-			wcslen(L"[ENTER] Game\nF[BSPACE] Quit"),
+			wcslen(L"[ENTER] Game\n[BSPACE] Quit"),
 			textFormats[static_cast<size_t>(TextFormat::NORMAL)],            // Text format
 			D2D1::RectF(0, 180, 320, 210), // Layout rectangle
 			brushes["blue"]
 		);
-
-		//pRenderTarget->DrawText(
-		//	L"[F10] Terminate Program",    // Text to render
-		//	wcslen(L"[F10] Terminate Program"),
-		//	textFormats[static_cast<size_t>(TextFormat::NORMAL)],            // Text format
-		//	D2D1::RectF(0, 210, 320, 210), // Layout rectangle
-		//	brushes["blue"]
-		//);
-
-		//D2D1_RECT_F unitSquare = D2D1::RectF(
-		//	20.f, 20.f,
-		//	100.f, 100.f
-		//);
-		//pRenderTarget->DrawRectangle(unitSquare, brushes["blue"], 3.f);
-
 	}
 
 private:
@@ -541,6 +532,7 @@ private:
 
 private:
 	std::wstring fontName = L"Press Start 2P";
+	static constexpr const wchar_t* fontFile = L"assets\\PressStart2P-Regular.ttf";
 	HWND hWnd;
 	const GJScene* scene = nullptr;
 	ID2D1HwndRenderTarget* pRenderTarget = nullptr;

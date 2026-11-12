@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <functional>
 #include <fstream>
+#include <random>
 
 #include "GJScene.h"
 #include "irrKlang.h"
@@ -153,21 +154,10 @@ public:
 
 	void enterMAINMENU() {
 		scene.state = State::MAINMENU;
-
-		//audioEngine->stopAllSounds();
-		//auto music = audioEngine->play2D("assets/mainmenu.ogg", true, false, true);
-		//if (!music) {
-		//	MessageBox(NULL, L"Could not play mainmenu.ogg", L"Error", MB_OK);
-		//}
 	}
 
 	void enterWIN() {
 		scene.state = State::WIN;
-		//audioEngine->stopAllSounds();
-		//auto music = audioEngine->play2D("assets/win.ogg", true, false, true);
-		//if (!music) {
-		//	MessageBox(NULL, L"Could not play win.ogg", L"Error", MB_OK);
-		//}
 	}
 
 	void enterLOSS() {
@@ -176,13 +166,6 @@ public:
 
 	void enterPAUSED() {
 		scene.state = State::PAUSED;
-
-		//audioEngine->stopAllSounds();
-		//auto music = audioEngine->play2D("assets/mainmenu.ogg", true, false, true);
-		//if (!music) {
-		//	MessageBox(NULL, L"Could not play mainmenu.ogg", L"Error", MB_OK);
-		//}
-
 	}
 
 	void enterPREGAME() {
@@ -243,23 +226,18 @@ public:
 	}
 	void event4() {
 		globalSpeedUp = 2.f;
-		//increaseGlobalSize(1);
 		for (int i = 17; i < 19; ++i) {
 			initRandObstacle(i);
 		}
 	}
 	void event5() {
-		//increaseGlobalSize(1);
 		for (int i = 23; i < scene.obstacles.size(); ++i) {
 			initRandObstacle(i);
 		}
 	}
 	void event6() {
 		globalSpeedUp = 2.3f;
-		//increaseGlobalSize(1);
 		MessageBox(NULL, L"OMG You're Hardcore!", L"Error", MB_OK);
-		for (int i = 0; i < scene.obstacles.size(); ++i) {
-		}
 	}
 
 	void increaseGlobalSize(int add) {
@@ -480,7 +458,6 @@ public:
 
 	bool isCollision(const Entity& e1, const Entity& e2, float cheatParam = 0.f) {
 		vec3 delta = e1.getPos() - e2.getPos();
-		//vec3 delta = e1.position - e2.position;
 		float collisionLim = e1.size + e2.size - cheatParam;
 		if (std::abs(delta.e[0]) < collisionLim) {
 			if (std::abs(delta.e[1]) < collisionLim) {

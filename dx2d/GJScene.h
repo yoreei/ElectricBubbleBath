@@ -1,32 +1,9 @@
 #pragma once
+#include <array>
+#include <cmath>
 #include <cstdint>
-#include <vector>
-#include <memory>
-#include <bitset>
-#include <random>
 
-#include "Animation.h"
-#include "3d/common3d.h"
-
-
-
-
-
-enum class EntityType {
-	PlayerEntity1 = 0,
-	PlayerEntity2,
-	PlayerEntity3,
-	PlayerEntity4,
-	EnemyEntity1,
-	EnemyEntity2,
-	EnemyEntity3,
-	EnemyEntity4
-};
-
-enum class Belonging {
-	Player = 0,
-	CPU
-};
+#include "math/vec3.h"
 
 vec3 vec3op(const vec3& v, float(*op)(float)) {
 	return vec3{
@@ -47,9 +24,6 @@ struct Entity {
 	void moveBy(const vec3& by) {
 		position += by;
 	}
-	//const vec3& getRawPos() {
-	//	return position;
-	//}
 	void setPos(const vec3& newPos) {
 		position = newPos;
 	}
@@ -61,19 +35,6 @@ struct Entity {
 	}
 private:
 	vec3 position;
-	//Belonging belonging = Belonging::CPU;
-	//uint8_t factionId = 0;
-	//uint32_t maxHealth = 1;
-	//uint32_t power = 1;
-	//uint32_t maxPower = 1;
-	//std::bitset<32> powerUps;
-	//std::vector<size_t> bitmapIds{};
-	//Animation animation = Animation::Idle;
-	//vec3 direction;
-};
-
-class Obstacle {
-
 };
 
 enum class State {
@@ -96,26 +57,18 @@ struct GJScene {
 			entities[i].size = 2;
 			entities[i].setPos(vec3{ 180.f, 240.f, 0.f });
 		}
-		//keybinds['Q'] = 0;
-		//keybinds['A'] = 0;
-		//keybinds['W'] = 0;
-		//keybinds['S'] = 0;
 	}
 
 	void resetObstacles() {
 		obstacles.fill(GJScene::emptyEntity);
 	}
 
-
-	//std::array<int, 255> keybinds;
-	//Entity playerController;
 	State state = State::MAINMENU;
 	bool explodeCd = false;
 	bool qLeapCd = false;
 	bool qLeapActive = false;
 	uint64_t hiScore = 0;
 	uint64_t points = 100;
-	//v entities move
 	std::array<Entity, 4> entities{};
 	std::array<Entity, 25> obstacles{};
 	static inline Entity emptyEntity;

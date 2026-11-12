@@ -13,10 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\2d">
-      <UniqueIdentifier>{6238bdcc-3c7e-493c-a703-2ed6e98180c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\3d">
+    <Filter Include="Header Files\math">
       <UniqueIdentifier>{1251086c-5c21-46dd-801c-621468d6ff08}</UniqueIdentifier>
     </Filter>
     <Filter Include="dlls">
@@ -39,26 +36,8 @@
     <ClInclude Include="GJSimulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="2d\common2d.h">
-      <Filter>Header Files\2d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\color.h">
-      <Filter>Header Files\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\common3d.h">
-      <Filter>Header Files\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\interval.h">
-      <Filter>Header Files\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\ray.h">
-      <Filter>Header Files\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\vec3.h">
-      <Filter>Header Files\3d</Filter>
+    <ClInclude Include="math\vec3.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="GJRenderer.h">
       <Filter>Header Files</Filter>
@@ -90,6 +69,9 @@
       <Filter>dlls</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="..\assets\ingame.ogg">
+      <Filter>Header Files\copyToOut</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\assets\PressStart2P-Regular.ttf">
       <Filter>Header Files\copyToOut</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="..\assets\qLeap.png">
