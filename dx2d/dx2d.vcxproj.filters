@@ -89,9 +89,6 @@
     <CopyFileToFolders Include="..\libs\irrklang\irrKlang.dll">
       <Filter>dlls</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\assets\mainmenu.ogg">
-      <Filter>Header Files\copyToOut</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="..\assets\ingame.ogg">
       <Filter>Header Files\copyToOut</Filter>
     </CopyFileToFolders>
