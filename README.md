@@ -2,29 +2,26 @@
 
 [![Build](https://github.com/yoreei/ElectricBubbleBath/actions/workflows/build.yml/badge.svg)](https://github.com/yoreei/ElectricBubbleBath/actions/workflows/build.yml)
 
-A retro arcade game written from scratch in C++ on top of raw Win32 and Direct2D, with no game engine.
-Made over a weekend for [Global Game Jam 2025](https://globalgamejam.org/games/2025) (theme: *Bubble*).
+A small arcade game I made over a weekend for [Global Game Jam 2025](https://globalgamejam.org/games/2025). The theme was "Bubble".
+It's written in C++ against Win32 and Direct2D directly, without a game engine.
 
 [![Gameplay](docs/gameplay.gif)](https://youtu.be/UAGAdAS9JEM)
 
-▶ [Watch the full gameplay video on YouTube](https://youtu.be/UAGAdAS9JEM) · ⬇ [Download for Windows](https://github.com/yoreei/ElectricBubbleBath/releases/latest)
+[Gameplay video on YouTube](https://youtu.be/UAGAdAS9JEM) | [Download for Windows](https://github.com/yoreei/ElectricBubbleBath/releases/latest)
 
-## The game
+## How to play
 
-> You are an electron, running along the path of least resistance. Do not hit the air bubbles!
+You are an electron, running along the path of least resistance. Avoid the air bubbles.
 
-You control four copies of the same electron at once, flying diagonally and bouncing off the walls, while air bubbles drift, wrap around the screen and ricochet off each other.
-Every bubble that touches an electron copy destroys it. You score points over time, and the round ends when all four copies are gone.
-Beat the high score to win.
-The bath gets more crowded and faster as the round goes on.
+The electron exists as four copies at once. They fly diagonally and bounce off the walls. Bubbles drift across the screen, wrap around the edges and bounce off each other, and any copy that touches a bubble is lost. You earn points as long as at least one copy survives. When all four are gone the round ends, and you win if you beat the high score. More bubbles appear and everything speeds up the longer you last.
 
 | Key | Action |
 |---|---|
-| `Q` `W` `A` `S` | **Quantum Scatter**: collapse all copies onto that electron and scatter them again (costs 75 points) |
-| `Space` | **Quantum Leap**: vanish for 2 seconds and pass through bubbles (12 s cooldown) |
-| `Esc` | Pause / resume |
-| `R` | Restart (from pause or the end screen) |
-| `Enter` / `Backspace` | Start / quit (main menu) |
+| Q, W, A, S | Quantum Scatter: gather all copies at that electron and send them out again. Costs 75 points. |
+| Space | Quantum Leap: disappear for 2 seconds so bubbles pass through you. 12 second cooldown. |
+| Esc | Pause and resume |
+| R | Restart, from the pause or end screen |
+| Enter, Backspace | Start or quit, from the main menu |
 
 <p>
   <img src="docs/screenshot-instructions.png" width="32%" alt="Instructions screen">
@@ -32,24 +29,19 @@ The bath gets more crowded and faster as the round goes on.
   <img src="docs/screenshot-late-game.png" width="32%" alt="Late game">
 </p>
 
-## How it's built
+## Technical notes
 
-- **Rendering:** Direct2D draws into a 360×360 off-screen target with antialiasing off, then scales it up to the screen for crisp pixel art. Sprites are loaded with WIC.
-- **Text:** DirectWrite, using the bundled *Press Start 2P* font loaded from the game folder (no install needed).
-- **Audio:** [irrKlang](https://www.ambiera.com/irrklang/), streaming Ogg Vorbis music.
-- **Gameplay:** a fixed-rate simulation with simple circle physics. Bubbles ricochet off each other weighted by size, and a timed event queue ramps up the difficulty.
-- **Code:** a single-window Win32 app split into simulation (`GJSimulation.h`), scene data (`GJScene.h`) and rendering (`GJRenderer.h`).
+The game draws everything into a 360x360 Direct2D render target with antialiasing turned off and then scales that up to fill the screen, which gives the pixel art look. PNG sprites are loaded through WIC. Text goes through DirectWrite with the Press Start 2P font, which the game loads from its own folder. Music is played with irrKlang.
+
+The simulation runs at a fixed rate. Bubbles are circles that push each other apart in proportion to their size, and a timed list of events adds bubbles and raises the speed during a round. The code is split into the simulation (`GJSimulation.h`), the scene data (`GJScene.h`) and the renderer (`GJRenderer.h`).
 
 ## Building
 
-Requires Windows 10 or later and Visual Studio 2022 with the *Desktop development with C++* workload.
-All dependencies are included in the repository.
+You need Windows 10 or later and Visual Studio 2022 with the "Desktop development with C++" workload. The dependencies are checked into the repository.
 
-1. Open `ElectricBubbleBath.sln`.
-2. Select the `Release | x64` configuration.
-3. Press F5. The game, `irrKlang.dll` and `assets/` are placed in `x64/Release/`.
+Open `ElectricBubbleBath.sln`, pick `Release | x64` and press F5. The exe, `irrKlang.dll` and the `assets` folder end up in `x64/Release/`.
 
-Or from a Developer Command Prompt:
+From a Developer Command Prompt:
 
 ```
 msbuild ElectricBubbleBath.sln -p:Configuration=Release -p:Platform=x64
@@ -57,7 +49,7 @@ msbuild ElectricBubbleBath.sln -p:Configuration=Release -p:Platform=x64
 
 ## Credits
 
-- Game design and code: [yoreei](https://github.com/yoreei)
-- Font: [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) by CodeMan38, [SIL Open Font License](assets/PressStart2P-OFL.txt)
-- Audio library: [irrKlang](https://www.ambiera.com/irrklang/) by Ambiera (free for non-commercial use)
-- `vec3` math: adapted from Peter Shirley's [*Ray Tracing in One Weekend*](https://raytracing.github.io) (CC0)
+- Design and code by [yoreei](https://github.com/yoreei)
+- [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P) font by CodeMan38, under the [SIL Open Font License](assets/PressStart2P-OFL.txt)
+- [irrKlang](https://www.ambiera.com/irrklang/) audio library by Ambiera, free for non-commercial use
+- The `vec3` class is adapted from Peter Shirley's [Ray Tracing in One Weekend](https://raytracing.github.io) (CC0)
