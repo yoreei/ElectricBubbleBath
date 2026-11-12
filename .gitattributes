@@ -1,0 +1,15 @@
+# Let git normalize text line endings; never touch binaries
+* text=auto
+
+*.sln     text eol=crlf
+*.vcxproj text eol=crlf
+*.filters text eol=crlf
+*.rc      binary
+
+*.ogg binary
+*.mp3 binary
+*.png binary
+*.ico binary
+*.ttf binary
+*.dll binary
+*.lib binary
