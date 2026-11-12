@@ -32,9 +32,9 @@ public:
 		}
 
 		audioEngine->stopAllSounds();
-		auto music = audioEngine->play2D("assets/ingame.mp3", true, false, true);
+		auto music = audioEngine->play2D("assets/ingame.ogg", true, false, true);
 		if (!music) {
-			MessageBox(NULL, L"Could not play ingame.mp3", L"Error", MB_OK);
+			MessageBox(NULL, L"Could not play ingame.ogg", L"Error", MB_OK);
 		}
 		enterMAINMENU();
 	}
@@ -155,18 +155,18 @@ public:
 		scene.state = State::MAINMENU;
 
 		//audioEngine->stopAllSounds();
-		//auto music = audioEngine->play2D("assets/mainmenu.mp3", true, false, true);
+		//auto music = audioEngine->play2D("assets/mainmenu.ogg", true, false, true);
 		//if (!music) {
-		//	MessageBox(NULL, L"Could not play mainmenu.mp3", L"Error", MB_OK);
+		//	MessageBox(NULL, L"Could not play mainmenu.ogg", L"Error", MB_OK);
 		//}
 	}
 
 	void enterWIN() {
 		scene.state = State::WIN;
 		//audioEngine->stopAllSounds();
-		//auto music = audioEngine->play2D("assets/win.mp3", true, false, true);
+		//auto music = audioEngine->play2D("assets/win.ogg", true, false, true);
 		//if (!music) {
-		//	MessageBox(NULL, L"Could not play win.mp3", L"Error", MB_OK);
+		//	MessageBox(NULL, L"Could not play win.ogg", L"Error", MB_OK);
 		//}
 	}
 
@@ -178,9 +178,9 @@ public:
 		scene.state = State::PAUSED;
 
 		//audioEngine->stopAllSounds();
-		//auto music = audioEngine->play2D("assets/mainmenu.mp3", true, false, true);
+		//auto music = audioEngine->play2D("assets/mainmenu.ogg", true, false, true);
 		//if (!music) {
-		//	MessageBox(NULL, L"Could not play mainmenu.mp3", L"Error", MB_OK);
+		//	MessageBox(NULL, L"Could not play mainmenu.ogg", L"Error", MB_OK);
 		//}
 
 	}
